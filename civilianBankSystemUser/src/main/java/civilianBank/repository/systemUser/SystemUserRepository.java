@@ -122,6 +122,11 @@ public class SystemUserRepository {
 				+ searchEmail + " " + searchUserShortName + " " + searchEmail + " " + branchCode);
 		return result;
 	}
+	
+	public int systemUserSave(SystemUserEntity entity){
+		entityManager.persist(entity);
+		return entity.getId();
+	}
 
 	public List<SystemUserEntity> getAll() {
 		Query query = entityManager.createQuery("FROM SystemUserEntity WHERE ISREMOVE =:isRemove");

@@ -121,4 +121,8 @@ public class SystemUserService {
 
 		return systemUserRepository.getSystemUserNameById(id);
 	}
+	
+	public int systemUserCreate(SystemUserEntity entity){
+		return systemUserRepository.systemUserSave(entity);
+	}
 }

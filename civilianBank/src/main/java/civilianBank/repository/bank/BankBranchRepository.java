@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import civilianBank.entity.bank.BankBranchEntity;
+import civilianBank.exception.bank.NoRecordsFoundException;
 
 import java.util.List;
 
@@ -31,7 +32,6 @@ public class BankBranchRepository {
 	 * @return Bank Branch entity
 	 */
 	public BankBranchEntity getBankBranchByBranchCode(String branchCode) {
-		// TODO Exception handling
 		log.debug("BankBranchRepository.getBankBranchByBranchCode getting bank branch with branch code :" + branchCode);
 		Query query = entityManager.createQuery(
 				"FROM BankBranchEntity br WHERE br.branchCode = :branchCode AND br.bank.bankCode = :bankCode");
@@ -40,6 +40,7 @@ public class BankBranchRepository {
 		if ((BankBranchEntity) query.getSingleResult() == null) {
 			log.warn("BankBranchRepository.getBankBranchByBranchCode bank branch not found with branch code :"
 					+ branchCode);
+			throw new NoRecordsFoundException();
 		}
 		log.info(
 				"BankBranchRepository.getBankBranchByBranchCode retrieved bank branch with branch code :" + branchCode);
@@ -51,7 +52,6 @@ public class BankBranchRepository {
 	 * @return Bank Branch entity
 	 */
 	public BankBranchEntity getBankBranchByBranchCodeAndDistrictID(String branchCode, long districtId) {
-		// TODO Exception handling
 		log.debug(
 				"BankBranchRepository.getBankBranchByBranchCodeAndDistrictID getting bank branch with branch code and district id :"
 						+ branchCode + "  " + districtId);
@@ -64,6 +64,7 @@ public class BankBranchRepository {
 			log.warn(
 					"BankBranchRepository.getBankBranchByBranchCodeAndDistrictID bank branch not found with branch code and district id :"
 							+ branchCode + "  " + districtId);
+			throw new NoRecordsFoundException();
 		}
 		log.info(
 				"BankBranchRepository.getBankBranchByBranchCodeAndDistrictID bank branch retrieved with branch code and district id :"

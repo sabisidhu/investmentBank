@@ -69,6 +69,26 @@ public class SystemUserRepository {
 		logger.info("SystemUserRepository.getUserGroupByUserId retrieved user group  with userId :" + userId);
 		return result1;
 	}
+	
+	/**
+	 * @Purpose get user group by user id.
+	 * @param userId
+	 * 
+	 * @return user group
+	 */
+
+	public SystemUserEntity getSystemUserByUserId(int userId) {
+		logger.debug("SystemUserRepository.getSystemUserByUserId get user group  with userId :" + userId);
+		Query query = entityManager.createQuery("SELECT a FROM SystemUserEntity WHERE id =:systemUserId");
+		query.setParameter("systemUserId", userId);
+		if ( query.getSingleResult() == null) {
+			logger.warn("SystemUserRepository.getSystemUserByUserId not foud user group  with userId :" + userId);
+			throw new NoRecordsFoundException();
+		}
+		 
+		 logger.info("SystemUserRepository.getSystemUserByUserId retrieved user group  with userId :" + userId);
+		return (SystemUserEntity)query.getSingleResult();
+	}
 
 	/**
 	 * @Purpose get system user total number record

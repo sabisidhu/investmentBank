@@ -17,7 +17,7 @@ import civilianBank.repository.systemUser.SystemUserRepository;
 
 @Configuration
 @Profile("test")
-public class ServiceTestConfiguration {
+public class SyetemUserTestConfiguration {
 	static public int id = 12;
 	static public String userCode = "anyCode";
 	static public UUID loginCode = UUID.randomUUID();
@@ -77,7 +77,7 @@ public class ServiceTestConfiguration {
 		Map<String, Object> loginResponse = new HashMap<String, Object>();
 
 		loginResponse.put("authToken", UUID.randomUUID());
-		loginResponse.put("accountid", ServiceTestConfiguration.id);
+		loginResponse.put("accountid", SyetemUserTestConfiguration.id);
 		return loginResponse;
 	}
 	@Bean

@@ -21,14 +21,14 @@ public class SyetemUserTestConfiguration {
 	static public int id = 12;
 	static public String userCode = "anyCode";
 	static public UUID loginCode = UUID.randomUUID();
-	static public String userName = "Sabi";
+	static public String userName = "sabi";
 	static public String userShortName = "Sabi";
 	static public String empCode = "mngr";//
 	static public int branchCode = 321;
 	static public int userGroup = 3;
 	static public int userStatus = 1;
 	static public String emailId = "dummy@gmail.com";
-	static public String password = "anyPassword";
+	static public String password = "password";
 	static public char pwdChangedForced;
 	static public int pwdChangePeriodDays = 1;
 	static public Date pwdChangePreviousDate = new Date();

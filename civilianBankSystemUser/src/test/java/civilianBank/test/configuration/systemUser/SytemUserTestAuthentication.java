@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Profile;
 import civilianBank.entity.systemUser.AuthenticationRequest;
 
 @Configuration
-@Profile("test")
+@Profile("testAuthentication")
 public class SytemUserTestAuthentication {
 	public static String userName="sabi";
 	public static String password="password";

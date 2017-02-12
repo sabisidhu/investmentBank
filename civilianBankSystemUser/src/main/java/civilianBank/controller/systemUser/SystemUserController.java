@@ -59,7 +59,7 @@ public class SystemUserController {
 	public ResponseEntity<List<SystemUserEntity>> getAllActiveUserGroupList() {
 		List<SystemUserEntity> ls;
 
-		ls = service.getAllSystemUser();
+//		ls = service.ge
 
 		HttpHeaders headers = new HttpHeaders();
 

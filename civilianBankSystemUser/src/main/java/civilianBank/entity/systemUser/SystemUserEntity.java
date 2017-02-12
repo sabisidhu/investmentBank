@@ -3,6 +3,7 @@ package civilianBank.entity.systemUser;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Created by BS23 Parshotam
@@ -22,7 +23,7 @@ public class SystemUserEntity {
     private String userCode;
 
     @Column(name = "LOGINCODE")
-    private int loginCode;
+    private UUID loginCode;
 
     @Column(name = "USERNAME")
     @Size(max = 100)
@@ -142,12 +143,12 @@ public class SystemUserEntity {
         this.userCode = userCode;
     }
 
-    public int getLoginCode() {
+    public UUID getLoginCode() {
         return loginCode;
     }
 
-    public void setLoginCode(int loginCode) {
-        this.loginCode = loginCode;
+    public void setLoginCode(UUID uuid) {
+        this.loginCode = uuid;
     }
 
     public String getUserName() {

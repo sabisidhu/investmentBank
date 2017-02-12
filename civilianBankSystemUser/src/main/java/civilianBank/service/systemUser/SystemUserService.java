@@ -35,11 +35,6 @@ public class SystemUserService {
 
 	}
 
-	public List<UserGroupEntity> getUserGroupList() {
-		return userGroupRepository.getAllActiveGroups();
-		// return userGroupRepository.getAllUserGroupWithoutSuperAdmin();
-
-	}
 
 	// public void createSystemUser(SystemUserEntity systemUserEntity) {
 	// systemUserRepository.create(systemUserEntity);
@@ -49,9 +44,6 @@ public class SystemUserService {
 		return userGroupRepository.getUserGroupById(groupId);
 	}
 
-	public List<SystemUserEntity> getAllSystemUser() {
-		return systemUserRepository.getAll();
-	}
 
 	public int getSystemUserTotalRecordNumber(String searchUserName, String searchUserShortName, String searchEmail,
 			int branchCode) {
@@ -67,9 +59,6 @@ public class SystemUserService {
 	// systemUserRepository.update(systemUserEntity);
 	// }
 
-	public List<SystemUserEntity> getAllAuthorizedSystemUser(String menuCode, int branchCode) {
-		return systemUserRepository.getAllAuthorizedSystemUser(menuCode, branchCode);
-	}
 
 	public SystemUserEntity getSystemUserByUserName(String userName) {
 		return systemUserRepository.getSystemUserByUserName(userName);
@@ -83,28 +72,6 @@ public class SystemUserService {
 			return false;
 	}
 
-	// public void createUserGroup(UserGroupEntity userGroupEntity) {
-	// userGroupRepository.create(userGroupEntity);
-	// }
-
-	// public void updateUserGroup(UserGroupEntity userGroupEntity) {
-	// if(userGroupEntity.getId() != superAdminUserGroupId)
-	// {
-	// systemUserRepository.updateSystemUserGroupStatus(userGroupEntity);
-	// }
-	// userGroupRepository.update(userGroupEntity);
-	// }
-
-	// public CustomerTokenEntity getCustomerTokenEntityByCustomerAccountId(int
-	// customerAccountId) {
-	// return
-	// customerTokenRepository.getCustomerTokenEntityByCustomerAccountId(customerAccountId);
-	// }
-	//
-	// public void deleteCustomerTokenEntity(CustomerTokenEntity
-	// customerTokenEntity) {
-	// customerTokenRepository.delete(customerTokenEntity);
-	// }
 
 	public SystemUserEntity getSystemUserByEmail(String searchKey) {
 		return systemUserRepository.getSystemUserByEmail(searchKey);
@@ -127,9 +94,4 @@ public class SystemUserService {
 		return systemUserRepository.systemUserSave(entity);
 	}
 
-	public SystemUserEntity login(AuthenticationRequest authenticationRequest) {
-		return systemUserRepository.checkUserNameAndPassword(authenticationRequest.getUsername(),
-				authenticationRequest.getPassword());
-
-	}
 }

@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import civilianBank.entity.systemUser.AuthenticationRequest;
 import civilianBank.entity.systemUser.SystemUserEntity;
 import civilianBank.entity.systemUser.UserGroupEntity;
 import civilianBank.exception.systemUser.NoRecordsFoundException;
@@ -30,22 +31,23 @@ public class SystemUserRepository {
 	 * @return SystemUserEnotity
 	 */
 
-	public SystemUserEntity checkUserNameAndPassword(String systemUserName, String password) {
+	public SystemUserEntity checkUserNameAndPassword(AuthenticationRequest request) {
+	
 		logger.debug("SystemUserRepository.checkUserNameAndPassword checking userName and password with :"
-				+ systemUserName + " and " + password);
+				+ request.getUsername() + " and " + request.getPassword());
 		Query query = entityManager.createQuery(
 				"FROM SystemUserEntity WHERE lower(USERNAME) =:systemUserName AND PASSWORD=:password AND ISREMOVE =:isRemove And hasActive = 'Y'");
-		query.setParameter("systemUserName", systemUserName.toLowerCase());
-		query.setParameter("password", password);
+		query.setParameter("systemUserName", request.getUsername().toLowerCase());
+		query.setParameter("password", request.getPassword());
 		query.setParameter("isRemove", 0);
 		query.setMaxResults(1);
 		if ((SystemUserEntity) query.getSingleResult() == null) {
 			logger.warn("SystemUserRepository.checkUserNameAndPassword not found with userName and password :"
-					+ systemUserName + " and " + password);
+					+ request.getUsername() + " and " + request.getPassword());
 			throw new NoRecordsFoundException();
 		}
 		logger.info("SystemUserRepository.checkUserNameAndPassword retrieved information with userName and password :"
-				+ systemUserName + " and " + password);
+				+ request.getUsername() + " and " + request.getPassword());
 		return (SystemUserEntity) query.getSingleResult();
 	}
 

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import civilianBank.entity.systemUser.AuthenticationRequest;
 import civilianBank.entity.systemUser.SystemUserEntity;
 import civilianBank.entity.systemUser.UserGroupEntity;
 import civilianBank.repository.systemUser.SystemUserRepository;
@@ -121,8 +122,14 @@ public class SystemUserService {
 
 		return systemUserRepository.getSystemUserNameById(id);
 	}
-	
-	public int systemUserCreate(SystemUserEntity entity){
+
+	public int systemUserCreate(SystemUserEntity entity) {
 		return systemUserRepository.systemUserSave(entity);
+	}
+
+	public SystemUserEntity login(AuthenticationRequest authenticationRequest) {
+		return systemUserRepository.checkUserNameAndPassword(authenticationRequest.getUsername(),
+				authenticationRequest.getPassword());
+
 	}
 }

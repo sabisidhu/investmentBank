@@ -8,6 +8,7 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import com.civilianBank.notification.model.ConversationEntity;
+import com.civilianBank.notification.model.NotificationEntity;
 
 /**
  * Created by BS23 on Parshotam.
@@ -23,4 +24,15 @@ public class ConversationRepository {
         query.setParameter("openStatus", "Y");
         return (ConversationEntity)query.getSingleResult();
     }
+    public int create(ConversationEntity conversationEntity){
+    	entityManager.persist(conversationEntity);
+    	return conversationEntity.getId();
+    }
+    public int update(ConversationEntity conversationEntity){
+    	ConversationEntity entity = new ConversationEntity();
+    	entity = entityManager.find(ConversationEntity.class, conversationEntity.getId());
+		entity = conversationEntity;
+		return entity.getId();
+    }
+    
 }

@@ -1,4 +1,4 @@
-package com.civilianBank.model.notification;
+package com.civilianBank.notification.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import civilianBank.entity.systemUser.SystemUserEntity;
 import civilianBank.exception.systemUser.NoRecordsFoundException;
 import civilianBank.repository.systemUser.SystemUserRepository;
-import civilianBank.service.systemUser.SystemUserAuthentication;
+import civilianBank.service.systemUser.SystemUserAuthenticationService;
 import civilianBank.test.configuration.systemUser.SyetemUserTestConfiguration;
 import civilianBank.test.configuration.systemUser.SytemUserTestAuthentication;
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -28,7 +28,7 @@ public class SystemUserAuthenticationTest {
 	@Mock
 	SystemUserRepository repository;
 	@InjectMocks
-	SystemUserAuthentication auth;
+	SystemUserAuthenticationService auth;
 
 	@Before
 	public void setup() {
@@ -46,5 +46,6 @@ public class SystemUserAuthenticationTest {
 				.thenReturn(entity);
 		auth.login(SytemUserTestAuthentication.authenticationRequest());
 	}
+	
 
 }

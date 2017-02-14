@@ -10,8 +10,14 @@ import com.civilianBank.notification.service.NotificationService;
 public class NotificationCotroller {
 	@Autowired
 	NotificationService notificationService;
+	
+	@RequestMapping(value = "/conversation/create")
+	public void createNotification() {
 
-	@RequestMapping(value = "/")
+	}
+
+
+	@RequestMapping(value = "/notification/create")
 	public void getUserNotification() {
 
 	}

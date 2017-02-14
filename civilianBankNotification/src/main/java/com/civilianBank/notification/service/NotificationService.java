@@ -1,22 +1,18 @@
 package com.civilianBank.notification.service;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import com.civilianBank.notification.model.ConversationEntity;
 import com.civilianBank.notification.model.NotificationEntity;
 import com.civilianBank.notification.model.NotificationViewModel;
-import com.civilianBank.notification.model.SystemUserEntity;
 import com.civilianBank.notification.repository.ConversationRepository;
 import com.civilianBank.notification.repository.NotificationRepository;
-
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * Created by BS23 on 4/30/14.
@@ -65,54 +61,7 @@ public class NotificationService {
 				notificationSubType);
 	}
 
-	public NotificationViewModel getNotificationViewModelFromNotificationEntity(NotificationEntity notificationEntity)
-    {
-    	RestTemplate restTemplate = new RestTemplate();
-        NotificationViewModel notificationViewModel=new NotificationViewModel();
 
-        notificationViewModel.setReferenceTableId(notificationEntity.getRefTableId());
-        notificationViewModel.setNotificationId(notificationEntity.getNotificationTypeId());
-        List<ConversationEntity> conversationEntities = notificationEntity.getConversationEntities();
-//        Object object = CollectionUtils.find(conversationEntities, new Predicate() {
-//            @Override
-//            public boolean evaluate(Object ob) {
-//                ConversationEntity conversationEntity =(ConversationEntity) ob;
-//                return conversationEntity.getStatus()== ConversationStatusEnum.Active.getType(); //'A'=conversation Active
-//            }
-//        });
-        //ConversationEntity conversationEntity =(ConversationEntity) object;
-        ConversationEntity conversationEntityObject = new ConversationEntity();
-        for(ConversationEntity object : conversationEntities){
-        	if(object.getStatus()=='Y'){
-        	conversationEntityObject = object;
-        	break;
-        }
-        
-        
-        ConversationEntity conversationEntity =conversationEntityObject;
-        notificationViewModel.setConversationId(conversationEntity.getId());
-        notificationViewModel.setMessageBody(conversationEntity.getMessage());
-        notificationViewModel.setUrl(notificationEntity.getUrl());
-        notificationViewModel.setConversationDate(conversationEntity.getConversationDate());
-        int fromUserId=conversationEntity.getFromUserId();
-        SystemUserEntity systemUserEntity = restTemplate.getForObject("fromUserId", SystemUserEntity.class);
-        notificationViewModel.setSenderName(systemUserEntity.getUserShortName());
-        notificationViewModel.setSubtypeId(notificationEntity.getNotificationSubType());
-        //SimpleDateFormat fmt = new SimpleDateFormat("dd MM yyyy");
-        notificationViewModel.setConversationDateAsString(conversationEntity.getConversationDate()== null ? "No Date" : DateFormat.getDateTimeInstance().format(conversationEntity.getConversationDate()).toString());
-        return notificationViewModel;
-    }
-
-	public List<NotificationViewModel> getNotificationListFromNotificationEntityList(
-			List<NotificationEntity> notificationEntities) {
-		List<NotificationViewModel> notificationViewModels = new ArrayList<NotificationViewModel>();
-		for (NotificationEntity notificationEntity : notificationEntities) {
-			NotificationViewModel notificationViewModel = getNotificationViewModelFromNotificationEntity(
-					notificationEntity);
-			notificationViewModels.add(notificationViewModel);
-		}
-		return notificationViewModels;
-	}
 
 	public NotificationEntity getNotificationEntityById(int id) {
 		return notificationRepository.getNotificationById(id);
@@ -201,7 +150,7 @@ public class NotificationService {
 		return notificationEntity.getRefTableId();
 	}
 
-	public void edit(int refTableId, int checkerId, int notificationTypeId, String controllerName, String message) {
+	public void edit(int refTableId, int checkerId, int notificationTypeId, String controllerName, String message, int currentUserId) {
 		NotificationEntity notificationEntity = new NotificationEntity();
 		notificationEntity.setNotificationTypeId(notificationTypeId); // 5 =
 																		// CREATE
@@ -215,7 +164,7 @@ public class NotificationService {
 		notificationEntity.setToUserId(checkerId);
 		notificationEntity.setUrl(controllerName);
 
-		String notificationTypeName = NotificationTypeEnum.getNameByValue(notificationTypeId);
+		String notificationTypeName = "Y";
 		String notificationType[] = notificationTypeName.split("_");
 		if (notificationType[0].equals("Create")) {
 			notificationEntity.setNotificationSubType('Y');
@@ -233,48 +182,7 @@ public class NotificationService {
 		this.createConversationEntity(conversationEntity);
 	}
 
-	public void removeReject(int id) {
-		ConversationEntity cTable = this.getConversationById(id);
-		cTable.setStatus(ConversationStatusEnum.Close.getType());
-		this.updateConversationEntity(cTable);
-		NotificationEntity notificationEntity = this.getNotificationEntityById(cTable.getNotificationId());
-		notificationEntity.setStatus(NotificationStatusEnum.Close.getType());// C=
-																				// open
-		this.updateNotificationEntity(notificationEntity);
-	}
 
-	public PreviousNextNotification getPreviousAndNextNotificationNumber(NotificationEntity n,
-			ConversationEntity conversationEntity) {
-		PreviousNextNotification previousNextNotification = new PreviousNextNotification();
-		List<ConversationEntity> conversationEntities = this.getConversationEntityForAUser(
-				currentUserInfoService.getCurrentUserId(), n.getNotificationTypeId(), n.getStatus(),
-				n.getNotificationSubType());
-		int totalLength = conversationEntities.size();
-		int index = this.getListIndex(conversationEntities, conversationEntity);
-
-		if (index > 1) {
-			ConversationEntity conversationEntity2 = conversationEntities.get(index - 2);
-			NotificationEntity notificationEntity = this
-					.getNotificationEntityById(conversationEntity2.getNotificationId());
-			previousNextNotification.setPreviousId(conversationEntity2.getId());
-			previousNextNotification.setPreviousUrl(notificationEntity.getUrl());
-
-		} else {
-			previousNextNotification.setPreviousId(-1);
-		}
-		if (index < totalLength) {
-			ConversationEntity conversationEntity3 = conversationEntities.get(index);
-			NotificationEntity notificationEntity = this
-					.getNotificationEntityById(conversationEntity3.getNotificationId());
-			previousNextNotification.setNextId(conversationEntity3.getId());
-			previousNextNotification.setNextUrl(notificationEntity.getUrl());
-
-		} else {
-			previousNextNotification.setNextId(-1);
-		}
-
-		return previousNextNotification;
-	}
 
 	public int getListIndex(List<ConversationEntity> conversationEntities, ConversationEntity conversationEntity) {
 
@@ -309,9 +217,6 @@ public class NotificationService {
 		return null;
 	}
 
-	public List<NotificationModel> getAllNotificationForAUser(int currentSystemUser) {
-		return notificationRepository.getAllNotificationForAUser(currentSystemUser);
-	}
 
 	public int getNumberOfNotificationForAUserOfASubType(int systemUserId, int notificationTypeId,
 			int notificationSubTypeId, char status) {
@@ -320,7 +225,7 @@ public class NotificationService {
 	}
 
 	// public <T extends Object> T checkIsDeleteReqAlreadySent(String
-	// columnName, T table) {
+	// columnName, T table) {  + 
 	// return
 	// type.cast(notificationRepository.checkIsDeleteReqAlreadySent(columnName,table));
 	// }

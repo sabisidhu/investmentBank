@@ -47,7 +47,7 @@ public class BankBranchRepository {
 		return (BankBranchEntity) query.getSingleResult();
 	}
 	/**
-	 * @Purpose Get Bank Branch by Bank code and District ID.
+Branch by Bank code and District ID.
 	 * @param branchcode districtid
 	 * @return Bank Branch entity
 	 */
